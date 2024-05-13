@@ -46,7 +46,8 @@ def load_dataset_classification(lang, string_labels=False, positive_class='consp
         classes = [binmap[doc['category']] for doc in dataset]
         classes = pd.Series(classes)
     ids = pd.Series([doc['id'] for doc in dataset])
-    return texts, classes, ids
+    emotions = pd.Series([doc['emotions'] for doc in dataset])
+    return texts, classes, ids, emotions
 
 def calculate_json_dataset_stats(dset: List, label=''):
     '''

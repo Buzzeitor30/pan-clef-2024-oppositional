@@ -7,17 +7,22 @@ from pathlib import Path
 import os, pickle
 from typing import List
 
+#CUSTOM
+from model import BertForSequenceClassificationExtended, CustomDataCollator, PipelineCustom
+
 import datasets
 import numpy as np
 import pandas as pd
 import torch
+
+from torch.utils.data import DataLoader
 from datasets import load_dataset, DatasetDict
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import train_test_split
 from transformers import AutoModelForSequenceClassification, TrainingArguments, Trainer, \
     TextClassificationPipeline
 from transformers import AutoTokenizer, set_seed
-from transformers import DataCollatorWithPadding
+from transformers import DataCollatorWithPadding, DefaultDataCollator
 
 from classif_experim.pynvml_helpers import print_gpu_utilization, print_cuda_devices
 
@@ -32,7 +37,7 @@ def set_torch_np_random_rseed(rseed):
 class SklearnTransformerBase(metaclass=ABCMeta):
     def __init__(self, hf_model_label, lang:str, eval=0.1,
                  learning_rate=2e-5, num_train_epochs=3, weight_decay=0.01, batch_size=16, warmup=0.1, gradient_accumulation_steps=1,
-                 max_seq_length=128, device=None, rnd_seed=381757, tmp_folder=None):
+                 max_seq_length=256, device=None, rnd_seed=381757, tmp_folder=None):
         '''
         :param hf_model_label: hugginface repo model identifier
         :param tmp_folder: Folder for saving model checkpoints, can be used for resuming the training.
@@ -100,6 +105,7 @@ class SklearnTransformerBase(metaclass=ABCMeta):
             per_device_eval_batch_size=self._batch_size,
             gradient_accumulation_steps=self._gradient_accumulation_steps,
             overwrite_output_dir=True, resume_from_checkpoint=False,
+            remove_unused_columns=False,
             **save_params
         )
 
@@ -182,7 +188,7 @@ class SklearnTransformerClassif(SklearnTransformerBase):
 
     def _init_tokenizer_params(self):
         if not hasattr(self, 'tokenizer_params'):
-            self.tokenizer_params = {'truncation': True}
+            self.tokenizer_params = {'truncation': True, 'padding':True, 'return_tensors':'pt'}
             if self._max_seq_length is not None: self.tokenizer_params['max_length'] = self._max_seq_length
 
     def _init_model(self, num_classes):
@@ -194,8 +200,11 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         self.tokenizer = AutoTokenizer.from_pretrained(self._hf_model_label)
         self._init_tokenizer_params()
         # load model
-        self.model = AutoModelForSequenceClassification.from_pretrained(
+        """self.model = AutoModelForSequenceClassification.from_pretrained(
+                        self._hf_model_label, num_labels=num_classes).to(self._device)"""
+        self.model = BertForSequenceClassificationExtended.from_pretrained(
                         self._hf_model_label, num_labels=num_classes).to(self._device)
+
 
     def set_string_labels(self, labels: List[str]):
         ''' Set 1-1 mapping between string labels and corresponding integer indices.
@@ -221,12 +230,12 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         ''' Map class indices in [0,...,NUM_CLASSES] to original class labels '''
         return np.array([l for l in map(lambda ix: self._cls_ix2label[ix], indices)])
 
-    def _prepare_dataset(self, X, y):
+    def _prepare_dataset(self, X, y, emotions):
         '''
         Convert fit() params to hugginface-compatible datasets.Dataset
         '''
         int_labels = self._labels2indices(y)
-        df = pd.DataFrame({'text': X, 'label': int_labels})
+        df = pd.DataFrame({'text': X, 'label': int_labels, 'emotions':emotions})
         if self._eval:
             train, eval = \
                 train_test_split(df, test_size=self._eval, random_state=self._rnd_seed, stratify=df[['label']])
@@ -236,7 +245,7 @@ class SklearnTransformerClassif(SklearnTransformerBase):
             dset = datasets.Dataset.from_pandas(df)
         return dset
 
-    def fit(self, X, y):
+    def fit(self, X, y, emotions):
         '''
         :param X: list-like of texts
         :param y: list-like of labels
@@ -247,27 +256,32 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         # model and tokenizer init
         self._init_model(self._num_classes)
         self._init_temp_folder()
-        self._do_training(X, y)
+        self._do_training(X, y, emotions)
         self._cleanup_temp_folder()
         # input txt formatting and tokenization
         # training
 
-    def predict(self, X):
+    def predict(self, X, emotions):
         '''
         :param X: list-like of texts
         :return: array of label predictions
         '''
         #todo X 2 pandas df, df to Dataset.from_pandas dset ? or simply from iterable ?
-        dset = datasets.Dataset.from_list([{'text': txt} for txt in X])
-        pipe = TextClassificationPipeline(model=self.model, tokenizer=self.tokenizer, device=self._device,
-                                          max_length=self._max_seq_length, truncation=True, batch_size=32)
-        result = pipe(dset['text'], function_to_apply='softmax')
-        del pipe
+        dset = datasets.Dataset.from_list([{'text': txt, 'emotions':emo} for txt, emo in zip(X, emotions)])
+
+        dataloader = DataLoader(dset, batch_size=32, shuffle=False)
+
+        with torch.no_grad():
+            logits = torch.tensor([], device=self.device)
+            for item in dataloader:
+                text = self.tokenizer(item["text"], **self.tokenizer_params).to(self.device)
+                emotions = torch.stack(item["emotions"], dim=1).float().to(self.device)
+                preds = self.model(**{"emotions": emotions, **text})
+                logits = torch.cat((logits, preds["logits"]), dim=0)
         torch.cuda.empty_cache()
-        # parse predictions, map to original labels
-        #todo regex-based extraction of integers from the specific format
-        pred = [int(r['label'][-1]) for r in result] # assumes *LABEL$N format
-        return self._indices2labels(pred)
+        sftmax = torch.nn.Softmax(dim=1)
+        _, pred = torch.max(sftmax(logits), dim=1)
+        return self._indices2labels(pred.cpu().tolist())
 
     def tokenize(self, txt, **kwargs):
         self._init_tokenizer_params()
@@ -276,14 +290,14 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         for k, v in kwargs.items(): params[k] = v
         return self.tokenizer(txt, **params)
 
-    def _do_training(self, X, y):
+    def _do_training(self, X, y, emotions):
         torch.manual_seed(self._rnd_seed)
         def preprocess_function(examples):
             return self.tokenizer(examples['text'], **self.tokenizer_params)
-        dset = self._prepare_dataset(X, y)
+        dset = self._prepare_dataset(X, y, emotions)
         tokenized_dset = dset.map(preprocess_function, batched=True)
         self._init_train_args()
-        data_collator = DataCollatorWithPadding(tokenizer=self.tokenizer)
+        data_collator = CustomDataCollator(tokenizer=self.tokenizer)
         if self._eval: train, eval = tokenized_dset['train'], tokenized_dset['eval']
         else: train, eval = tokenized_dset, None
         trainer = Trainer(
