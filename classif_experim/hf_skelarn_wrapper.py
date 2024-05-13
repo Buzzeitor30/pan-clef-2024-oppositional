@@ -45,7 +45,7 @@ class SklearnTransformerBase(metaclass=ABCMeta):
         self._weight_decay = weight_decay
         self._eval = eval; self._lang = lang
         if device: self._device = device
-        else: self._device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else: self._device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         self._max_seq_length = max_seq_length
         self._tmp_folder = tmp_folder
         self._rnd_seed = rnd_seed
