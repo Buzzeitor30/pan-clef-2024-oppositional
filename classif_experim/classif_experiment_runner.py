@@ -23,8 +23,9 @@ def run_classif_crossvalid(lang, model_label, model_params, positive_class='crit
     '''
     logger.info(f'RUNNING crossvalid. for model: {model_label}')
     score_fns = classif_scores('all')
-    texts, classes, txt_ids = load_dataset_classification(lang, positive_class=positive_class)
-    if test: texts, classes, txt_ids = texts[:test], classes[:test], txt_ids[:test]
+    texts, classes, txt_ids, emotions = load_dataset_classification(lang, positive_class=positive_class)
+    if test: texts, classes, txt_ids, emotions = texts[:test], classes[:test], txt_ids[:test], emotions[:test]
+    #texts, classes, txt_ids, emotions = texts[:100], classes[:100], txt_ids[:100], emotions[:100]
     foldgen = StratifiedKFold(n_splits=num_folds, random_state=rnd_seed, shuffle=True)
     fold_index = 0
     results_df = pd.DataFrame(columns=score_fns.keys())
@@ -37,11 +38,12 @@ def run_classif_crossvalid(lang, model_label, model_params, positive_class='crit
         # split data
         txt_tr, txt_tst = texts[train_index], texts[test_index]
         cls_tr, cls_tst = classes[train_index], classes[test_index]
+        emotions_tr, emotions_tst = emotions[train_index], emotions[test_index]
         id_tst = txt_ids[test_index]
         # train model
-        model.fit(txt_tr, cls_tr)
+        model.fit(txt_tr, cls_tr, emotions_tr)
         # evaluate model
-        cls_pred = model.predict(txt_tst)
+        cls_pred = model.predict(txt_tst, emotions_tst)
         for txt_id, pred in zip(id_tst, cls_pred):
             assert txt_id not in pred_res
             pred_res[txt_id] = pred
@@ -78,17 +80,19 @@ MAX_SEQ_LENGTH = 256
 
 HF_MODEL_LIST = {
     'en': [
-           'bert-base-cased',
+           #'bert-base-cased',
+           'FacebookAI/roberta-base'
           ],
     'es': [
-            'dccuchile/bert-base-spanish-wwm-cased',
+            #'dccuchile/bert-base-spanish-wwm-cased',
+            'PlanTL-GOB-ES/roberta-base-bne'
           ],
 }
 
 # default reasonable parameters for SklearnTransformerBase
 HF_CORE_HPARAMS = {
     'learning_rate': 2e-5,
-    'num_train_epochs': 3,
+    'num_train_epochs': 5,
     'warmup': 0.1,
     'weight_decay': 0.01,
     'batch_size': 16,
@@ -157,7 +161,7 @@ def run_classif_experiments(lang, num_folds, rnd_seed, test=False, experim_label
             time.sleep(pause_after_model * 60)
     return pred_res
 
-def run_all_critic_conspi(seed=DEFAULT_RND_SEED, langs=['en', 'es']):
+def run_all_critic_conspi(seed=DEFAULT_RND_SEED, langs=['en']):
     for lang in langs:
         run_classif_experiments(lang=lang, num_folds=5, rnd_seed=seed, test=None,
                                 positive_class='critical', pause_after_fold=1,
