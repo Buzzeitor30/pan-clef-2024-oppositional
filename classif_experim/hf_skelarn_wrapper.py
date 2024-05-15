@@ -25,8 +25,14 @@ from transformers import AutoTokenizer, set_seed
 from transformers import DataCollatorWithPadding, DefaultDataCollator
 
 from classif_experim.pynvml_helpers import print_gpu_utilization, print_cuda_devices
+import scipy
+def compute_metrics(eval_prediction):
+    
+    preds = np.argmax(scipy.special.softmax(eval_prediction.predictions, axis=1), axis=1)
 
-
+    return {
+        "f1":f1_score(eval_prediction.label_ids, preds, average="macro")
+    }
 def set_torch_np_random_rseed(rseed):
     np.random.seed(rseed)
     random.seed(rseed)
@@ -95,7 +101,9 @@ class SklearnTransformerBase(metaclass=ABCMeta):
                 'save_strategy' : 'epoch',
                 'evaluation_strategy' : 'epoch',
                 'save_total_limit' : 2,
-                'load_best_model_at_end' : True
+                'logging_strategy': 'epoch',
+                'load_best_model_at_end' : True,
+                'metric_for_best_model': 'eval_f1',
             }
         self._training_args = TrainingArguments(
             do_train=True, do_eval=self._eval is not None,
@@ -230,12 +238,17 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         ''' Map class indices in [0,...,NUM_CLASSES] to original class labels '''
         return np.array([l for l in map(lambda ix: self._cls_ix2label[ix], indices)])
 
-    def _prepare_dataset(self, X, y, emotions):
+    def _prepare_dataset(self, X, y, emotions, X_test, y_test, emotions_test):
         '''
         Convert fit() params to hugginface-compatible datasets.Dataset
         '''
         int_labels = self._labels2indices(y)
+        int_labels2 = self._labels2indices(y_test)
         df = pd.DataFrame({'text': X, 'label': int_labels, 'emotions':emotions})
+        df2  =  pd.DataFrame({'text': X_test, 'label': int_labels2, 'emotions':emotions_test})
+        dset = DatasetDict(
+                {'train': datasets.Dataset.from_pandas(df), 'eval': datasets.Dataset.from_pandas(df2)})
+        return dset
         if self._eval:
             train, eval = \
                 train_test_split(df, test_size=self._eval, random_state=self._rnd_seed, stratify=df[['label']])
@@ -245,7 +258,7 @@ class SklearnTransformerClassif(SklearnTransformerBase):
             dset = datasets.Dataset.from_pandas(df)
         return dset
 
-    def fit(self, X, y, emotions):
+    def fit(self, X, y, emotions, X_test, y_test, emotions_test):
         '''
         :param X: list-like of texts
         :param y: list-like of labels
@@ -256,7 +269,7 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         # model and tokenizer init
         self._init_model(self._num_classes)
         self._init_temp_folder()
-        self._do_training(X, y, emotions)
+        self._do_training(X, y, emotions, X_test, y_test, emotions_test)
         self._cleanup_temp_folder()
         # input txt formatting and tokenization
         # training
@@ -290,11 +303,11 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         for k, v in kwargs.items(): params[k] = v
         return self.tokenizer(txt, **params)
 
-    def _do_training(self, X, y, emotions):
+    def _do_training(self, X, y, emotions, X_test, y_test, emotions_test):
         torch.manual_seed(self._rnd_seed)
         def preprocess_function(examples):
             return self.tokenizer(examples['text'], **self.tokenizer_params)
-        dset = self._prepare_dataset(X, y, emotions)
+        dset = self._prepare_dataset(X, y, emotions, X_test, y_test, emotions_test)
         tokenized_dset = dset.map(preprocess_function, batched=True)
         self._init_train_args()
         data_collator = CustomDataCollator(tokenizer=self.tokenizer)
@@ -307,6 +320,7 @@ class SklearnTransformerClassif(SklearnTransformerBase):
             eval_dataset=eval,
             tokenizer=self.tokenizer,
             data_collator=data_collator,
+            compute_metrics= compute_metrics
         )
         trainer.train()
         if self.model is not trainer.model: # just in case

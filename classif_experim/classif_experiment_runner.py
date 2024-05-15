@@ -41,7 +41,7 @@ def run_classif_crossvalid(lang, model_label, model_params, positive_class='crit
         emotions_tr, emotions_tst = emotions[train_index], emotions[test_index]
         id_tst = txt_ids[test_index]
         # train model
-        model.fit(txt_tr, cls_tr, emotions_tr)
+        model.fit(txt_tr, cls_tr, emotions_tr, txt_tst, cls_tst, emotions_tst)
         # evaluate model
         cls_pred = model.predict(txt_tst, emotions_tst)
         for txt_id, pred in zip(id_tst, cls_pred):
@@ -92,7 +92,7 @@ HF_MODEL_LIST = {
 # default reasonable parameters for SklearnTransformerBase
 HF_CORE_HPARAMS = {
     'learning_rate': 2e-5,
-    'num_train_epochs': 5,
+    'num_train_epochs': 3,
     'warmup': 0.1,
     'weight_decay': 0.01,
     'batch_size': 16,
@@ -126,7 +126,7 @@ def run_classif_experiments(lang, num_folds, rnd_seed, test=False, experim_label
     models = HF_MODEL_LIST[lang] if model_list is None else model_list
     params = copy(HF_CORE_HPARAMS)
     params['lang'] = lang
-    params['eval'] = None
+    params['eval'] = .1
     params['max_seq_length'] = max_seq_length
     logger.info(f'RUNNING classif. experiments: lang={lang.upper()}, num_folds={num_folds}, '
                 f'max_seq_len={max_seq_length}, eval={params["eval"]}, rnd_seed={rnd_seed}, test={test}')
@@ -161,7 +161,7 @@ def run_classif_experiments(lang, num_folds, rnd_seed, test=False, experim_label
             time.sleep(pause_after_model * 60)
     return pred_res
 
-def run_all_critic_conspi(seed=DEFAULT_RND_SEED, langs=['en']):
+def run_all_critic_conspi(seed=DEFAULT_RND_SEED, langs=['en', 'es']):
     for lang in langs:
         run_classif_experiments(lang=lang, num_folds=5, rnd_seed=seed, test=None,
                                 positive_class='critical', pause_after_fold=1,

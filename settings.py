@@ -5,8 +5,8 @@ when introducing new variables, add them to this file with empty or default valu
 '''
 
 # DATASETS
-TRAIN_DATASET_EN = 'dataset_oppositional/dataset_en_train.json'
-TRAIN_DATASET_ES = 'dataset_oppositional/dataset_es_train.json'
+TRAIN_DATASET_EN = 'dataset_oppositional/dataset_en_train_emolex.json'
+TRAIN_DATASET_ES = 'dataset_oppositional/dataset_es_train_emolex.json'
 
 TEST_DATASET_EN = ''
 TEST_DATASET_ES = ''
