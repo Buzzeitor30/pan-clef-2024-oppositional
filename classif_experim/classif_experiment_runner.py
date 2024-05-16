@@ -78,10 +78,10 @@ MAX_SEQ_LENGTH = 256
 
 HF_MODEL_LIST = {
     'en': [
-           'bert-base-cased',
+           'FacebookAI/roberta-base',
           ],
     'es': [
-            'dccuchile/bert-base-spanish-wwm-cased',
+            'PlanTL-GOB-ES/roberta-base-bne',
           ],
 }
 
@@ -157,7 +157,7 @@ def run_classif_experiments(lang, num_folds, rnd_seed, test=False, experim_label
             time.sleep(pause_after_model * 60)
     return pred_res
 
-def run_all_critic_conspi(seed=DEFAULT_RND_SEED, langs=['en', 'es']):
+def run_all_critic_conspi(seed=DEFAULT_RND_SEED, langs=['en']):
     for lang in langs:
         run_classif_experiments(lang=lang, num_folds=5, rnd_seed=seed, test=None,
                                 positive_class='critical', pause_after_fold=1,

@@ -1,0 +1,47 @@
+INFO:root:RUNNING classif. experiments: lang=ES, num_folds=5, max_seq_len=256, eval=None, rnd_seed=564671, test=None
+INFO:root:... HPARAMS = learning_rate: 2e-05; num_train_epochs: 3; warmup: 0.1; weight_decay: 0.01; batch_size: 16
+INFO:root:RUNNING crossvalid. for model: PlanTL-GOB-ES/roberta-base-bne
+INFO:root:Starting Fold 1
+INFO:root:model built
+INFO:root:Fold 1 scores:
+INFO:root:F1_macro  : 0.889; F1        : 0.883; F1-neg    : 0.895; ACC       : 0.889; prec      : 0.882; recall    : 0.884; MCC       : 0.778
+INFO:root:Pausing for 1 minutes...
+INFO:root:Starting Fold 2
+INFO:root:model built
+INFO:root:Fold 2 scores:
+INFO:root:F1_macro  : 0.899; F1        : 0.893; F1-neg    : 0.906; ACC       : 0.900; prec      : 0.900; recall    : 0.886; MCC       : 0.799
+INFO:root:Pausing for 1 minutes...
+INFO:root:Starting Fold 3
+INFO:root:model built
+INFO:root:Fold 3 scores:
+INFO:root:F1_macro  : 0.898; F1        : 0.894; F1-neg    : 0.902; ACC       : 0.898; prec      : 0.878; recall    : 0.909; MCC       : 0.796
+INFO:root:Pausing for 1 minutes...
+INFO:root:Starting Fold 4
+INFO:root:model built
+INFO:root:Fold 4 scores:
+INFO:root:F1_macro  : 0.907; F1        : 0.900; F1-neg    : 0.913; ACC       : 0.907; prec      : 0.911; recall    : 0.890; MCC       : 0.813
+INFO:root:Pausing for 1 minutes...
+INFO:root:Starting Fold 5
+INFO:root:model built
+INFO:root:Fold 5 scores:
+INFO:root:F1_macro  : 0.873; F1        : 0.866; F1-neg    : 0.880; ACC       : 0.873; prec      : 0.867; recall    : 0.864; MCC       : 0.746
+INFO:root:CROSSVALIDATION results:
+INFO:root:F1_macro  : count: 5.000; mean: 0.893; std: 0.013; min: 0.873; 25%: 0.889; 50%: 0.898; 75%: 0.899; max: 0.907
+INFO:root:F1        : count: 5.000; mean: 0.887; std: 0.013; min: 0.866; 25%: 0.883; 50%: 0.893; 75%: 0.894; max: 0.900
+INFO:root:F1-neg    : count: 5.000; mean: 0.899; std: 0.012; min: 0.880; 25%: 0.895; 50%: 0.902; 75%: 0.906; max: 0.913
+INFO:root:ACC       : count: 5.000; mean: 0.893; std: 0.013; min: 0.873; 25%: 0.889; 50%: 0.898; 75%: 0.900; max: 0.907
+INFO:root:prec      : count: 5.000; mean: 0.888; std: 0.018; min: 0.867; 25%: 0.878; 50%: 0.882; 75%: 0.900; max: 0.911
+INFO:root:recall    : count: 5.000; mean: 0.887; std: 0.016; min: 0.864; 25%: 0.884; 50%: 0.886; 75%: 0.890; max: 0.909
+INFO:root:MCC       : count: 5.000; mean: 0.786; std: 0.026; min: 0.746; 25%: 0.778; 50%: 0.796; 75%: 0.799; max: 0.813
+INFO:root:Per-fold scores:
+INFO:root:F1_macro  : [0.889, 0.899, 0.898, 0.907, 0.873]
+INFO:root:F1        : [0.883, 0.893, 0.894, 0.900, 0.866]
+INFO:root:F1-neg    : [0.895, 0.906, 0.902, 0.913, 0.880]
+INFO:root:ACC       : [0.889, 0.900, 0.898, 0.907, 0.873]
+INFO:root:prec      : [0.882, 0.900, 0.878, 0.911, 0.867]
+INFO:root:recall    : [0.884, 0.886, 0.909, 0.890, 0.864]
+INFO:root:MCC       : [0.778, 0.799, 0.796, 0.813, 0.746]
+INFO:root:Confusion matrix:
+INFO:root: 511.20,   57.00
+INFO:root:  57.60,  450.00
+INFO:root:Pausing for 2 minutes...
