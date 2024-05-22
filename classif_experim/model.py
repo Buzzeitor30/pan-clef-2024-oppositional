@@ -25,11 +25,11 @@ class RobertaClassificationHeadExtended(nn.Module):
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
         self.dropout = nn.Dropout(classifier_dropout)
-        self.out_proj = nn.Linear(config.hidden_size, config.num_labels)
+        self.out_proj = nn.Linear(config.hidden_size + 4, config.num_labels)
 
     def forward(self, features, **kwargs):
         x = features[:, 0, :]  # take <s> token (equiv. to [CLS])
-        #x = torch.cat((x,kwargs["emotions"]), dim=1)
+        x = torch.cat((x,kwargs["emotions"]), dim=1)
         x = self.out_proj(x)
         return x 
 # **{inputs}
