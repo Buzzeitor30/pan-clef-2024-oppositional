@@ -77,6 +77,7 @@ def reconstruct_spacy_docs_from_json(json_file, lang, doc_categ_map=CATEGORY_MAP
         #print(';'.join(words))
         doc = Doc(nlp.vocab, words=words) # Recreate the Doc object
         # set the doc id and category properties
+        doc._.set(ON_DOC_ID, item['id'])
         if 'category' in item:
             doc._.set(ON_DOC_CLS_EXTENSION, doc_categ_map[item['category']])
         if 'annotations' in item:
