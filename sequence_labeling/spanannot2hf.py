@@ -10,7 +10,7 @@ import spacy
 from spacy.tokens import Doc
 from datasets import Dataset, Features, Sequence, ClassLabel, Value
 
-from data_tools.spacy_utils import get_doc_id
+from data_tools.spacy_utils import get_doc_id, get_doc_pos
 from data_tools.span_data_definitions import NONE_LABEL, LABEL_DEF
 
 
@@ -73,7 +73,8 @@ def convert_to_hf_format(label, data: List[Tuple[Doc, List[Tuple[int, int]]]]) -
     formatted_data = {
         'text_ids': [],
         'tokens': [],
-        'ner_tags': []
+        'ner_tags': [],
+        'pos': []
     }
     tag_class = spanannot_tags_classlabel(label)
     for doc, span_indices_list in data:
@@ -88,6 +89,7 @@ def convert_to_hf_format(label, data: List[Tuple[Doc, List[Tuple[int, int]]]]) -
         formatted_data['tokens'].append(tokens)
         formatted_data['ner_tags'].append([tag_class.str2int(tag) for tag in labels])
         formatted_data['text_ids'].append(get_doc_id(doc))
+        formatted_data['pos'].append(get_doc_pos(doc))
     return Dataset.from_dict(formatted_data, features=spanannot_feature_definition(label))
 
 def labels_from_predictions(preds, tok_indices, task_label: str):

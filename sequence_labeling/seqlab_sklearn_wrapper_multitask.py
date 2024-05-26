@@ -130,6 +130,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
         data_by_label = extract_spans(docs, span_labels, downsample_empty=downsample, rnd_seed=self._rnd_seed,
                                       label_set=self.task_labels)
         datasets = {}
+        label = None
         for label, data in data_by_label.items():
             datasets[label] = convert_to_hf_format(label, data)
         return datasets
@@ -187,6 +188,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
             #label_list = raw_dataset['train'].features['ner_tags'].feature.names
             tokenized_dataset = self._tokenize_token_classification_dataset(
                 raw_datasets=raw_dataset, tokenizer=self.tokenizer, task_id=self.task_indices[label])
+            print(tokenized_dataset)
             raw_dset_per_label[label] = tokenized_dataset
         # merge per-label datasets into one, for multi-task training
         dset_splits = ['train', 'eval'] if self._eval else ['train']
@@ -230,6 +232,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
                 labels.append(label_ids)
             tokenized_inputs["labels"] = labels
             tokenized_inputs["task_ids"] = [task_id] * len(tokenized_inputs["labels"])
+            #tokenized_inputs["pos_tagging"] = [0] * len(tokenized_inputs["labels"])
             return tokenized_inputs
         if isinstance(raw_datasets, DatasetDict):
             tokenized_datasets = raw_datasets.map(tokenize_and_align_labels, batched=True, num_proc=1,
