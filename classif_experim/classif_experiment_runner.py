@@ -5,7 +5,7 @@ import datetime
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import StratifiedKFold
-
+from torch import save
 from classif_experim.classif_utils import classif_scores
 from classif_experim.hf_skelarn_wrapper import SklearnTransformerClassif
 from data_tools.dataset_loaders import load_dataset_classification
@@ -42,6 +42,7 @@ def run_classif_crossvalid(lang, model_label, model_params, positive_class='crit
         id_tst = txt_ids[test_index]
         # train model
         model.fit(txt_tr, cls_tr, emotions_tr, txt_tst, cls_tst, emotions_tst)
+        #save(model.model.state_dict(), f"TASK4_BEST_MODEL_EPOCH_{fold_index}.pt")
         # evaluate model
         cls_pred = model.predict(txt_tst, emotions_tst)
         for txt_id, pred in zip(id_tst, cls_pred):

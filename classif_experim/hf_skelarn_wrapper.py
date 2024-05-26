@@ -313,6 +313,7 @@ class SklearnTransformerClassif(SklearnTransformerBase):
         data_collator = CustomDataCollator(tokenizer=self.tokenizer)
         if self._eval: train, eval = tokenized_dset['train'], tokenized_dset['eval']
         else: train, eval = tokenized_dset, None
+        opt = torch.optim.AdamW(self.model.get_parameters_for_optim(), lr=2e-5, weight_decay=0.01)
         trainer = Trainer(
             model=self.model,
             args=self._training_args,
@@ -320,7 +321,8 @@ class SklearnTransformerClassif(SklearnTransformerBase):
             eval_dataset=eval,
             tokenizer=self.tokenizer,
             data_collator=data_collator,
-            compute_metrics= compute_metrics
+            compute_metrics= compute_metrics,
+            optimizers=(opt, None)
         )
         trainer.train()
         if self.model is not trainer.model: # just in case
