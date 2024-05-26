@@ -256,4 +256,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    #demo_experiment('en', test_size=0.02, num_epochs=0.01)
+    #demo_experiment('es', test_size=0.02, num_epochs=0.01)

@@ -19,6 +19,8 @@ from sequence_labeling.multi_task_model import MultiTaskModel, Task
 from sequence_labeling.spanannot2hf import extract_spans, convert_to_hf_format, labels_from_predictions, \
     align_labels_with_tokens, extract_span_ranges
 
+from tqdm import tqdm
+
 # Lista de categorías
 categories = ["SPECIAL", "ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "INTJ", "NOUN", "NUM", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X", "SPACE", "PART"]
 
@@ -208,7 +210,6 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
             #label_list = raw_dataset['train'].features['ner_tags'].feature.names
             tokenized_dataset = self._tokenize_token_classification_dataset(
                 raw_datasets=raw_dataset, tokenizer=self.tokenizer, task_id=self.task_indices[label])
-            print(tokenized_dataset)
             raw_dset_per_label[label] = tokenized_dataset
         # merge per-label datasets into one, for multi-task training
         dset_splits = ['train', 'eval'] if self._eval else ['train']
@@ -301,7 +302,6 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
             print("\n\n")
 
     def _construct_predict_dataset(self, docs, spans=None):
-        print("Construct dataset")
         if spans == None: # no spans provided, create a list of #docs empty lists for compatibility
             spans = [[] for _ in range(len(docs))]
         raw_dset_per_label = self._construct_raw_hf_dataset(docs, spans, downsample=None)
@@ -309,7 +309,6 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
         for label in self.task_labels:
             tokenized_dataset = self._tokenize_token_classification_dataset(
                 raw_datasets=raw_dset_per_label[label], tokenizer=self.tokenizer, task_id=self.task_indices[label])
-            print(tokenized_dataset)
             tokenized_dset_per_label[label] = tokenized_dataset
         return tokenized_dset_per_label
 
@@ -325,7 +324,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
             else: raise ValueError(f'Label map already contains labels for text id {text_id} and task {task_label}')
         # tokenize input, predict, transform data
         tokenized_dset_per_label = self._construct_predict_dataset(X)
-        for label in self.task_labels:
+        for label in tqdm(self.task_labels, colour="green"):
             dset = tokenized_dset_per_label[label]
             for t in dset:
                 if not self._is_roberta: ttids = t['token_type_ids']
