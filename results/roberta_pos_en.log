@@ -1,0 +1,188 @@
+INFO:root:RUNNING classif. experiments: lang=EN, num_folds=5, max_seq_len=256, eval=None, rnd_seed=1943123, test=False
+INFO:root:... SEED = 1943123
+INFO:root:... HPARAMS = learning_rate: 2e-05; num_train_epochs: 5; warmup: 0.1; weight_decay: 0.01; batch_size: 16
+INFO:root:RUNNING crossvalid. for model: FacebookAI/roberta-base
+INFO:root:Starting Fold 1
+INFO:root:model built
+INFO:root:Fold 1 scores:
+INFO:root:F1: 0.567; P: 0.515; R: 0.653
+INFO:root:AGENT-F1: 0.590; AGENT-P: 0.598; AGENT-R: 0.583
+INFO:root:AGENT-F1-b: 0.814; AGENT-P-b: 0.755; AGENT-R-b: 0.882
+INFO:root:CAMPAIGNER-F1: 0.619; CAMPAIGNER-P: 0.632; CAMPAIGNER-R: 0.605
+INFO:root:CAMPAIGNER-F1-b: 0.814; CAMPAIGNER-P-b: 0.778; CAMPAIGNER-R-b: 0.854
+INFO:root:FACILITATOR-F1: 0.397; FACILITATOR-P: 0.338; FACILITATOR-R: 0.480
+INFO:root:FACILITATOR-F1-b: 0.586; FACILITATOR-P-b: 0.465; FACILITATOR-R-b: 0.794
+INFO:root:NEGATIVE_EFFECT-F1: 0.641; NEGATIVE_EFFECT-P: 0.538; NEGATIVE_EFFECT-R: 0.794
+INFO:root:NEGATIVE_EFFECT-F1-b: 0.773; NEGATIVE_EFFECT-P-b: 0.718; NEGATIVE_EFFECT-R-b: 0.837
+INFO:root:OBJECTIVE-F1: 0.497; OBJECTIVE-P: 0.374; OBJECTIVE-R: 0.740
+INFO:root:OBJECTIVE-F1-b: 0.622; OBJECTIVE-P-b: 0.503; OBJECTIVE-R-b: 0.813
+INFO:root:VICTIM-F1: 0.656; VICTIM-P: 0.608; VICTIM-R: 0.711
+INFO:root:VICTIM-F1-b: 0.808; VICTIM-P-b: 0.749; VICTIM-R-b: 0.876
+INFO:root:Starting Fold 2
+INFO:root:model built
+INFO:root:Fold 2 scores:
+INFO:root:F1: 0.573; P: 0.511; R: 0.674
+INFO:root:AGENT-F1: 0.640; AGENT-P: 0.635; AGENT-R: 0.644
+INFO:root:AGENT-F1-b: 0.818; AGENT-P-b: 0.774; AGENT-R-b: 0.867
+INFO:root:CAMPAIGNER-F1: 0.613; CAMPAIGNER-P: 0.612; CAMPAIGNER-R: 0.613
+INFO:root:CAMPAIGNER-F1-b: 0.812; CAMPAIGNER-P-b: 0.751; CAMPAIGNER-R-b: 0.883
+INFO:root:FACILITATOR-F1: 0.405; FACILITATOR-P: 0.342; FACILITATOR-R: 0.497
+INFO:root:FACILITATOR-F1-b: 0.553; FACILITATOR-P-b: 0.459; FACILITATOR-R-b: 0.693
+INFO:root:NEGATIVE_EFFECT-F1: 0.625; NEGATIVE_EFFECT-P: 0.489; NEGATIVE_EFFECT-R: 0.864
+INFO:root:NEGATIVE_EFFECT-F1-b: 0.759; NEGATIVE_EFFECT-P-b: 0.672; NEGATIVE_EFFECT-R-b: 0.872
+INFO:root:OBJECTIVE-F1: 0.506; OBJECTIVE-P: 0.389; OBJECTIVE-R: 0.724
+INFO:root:OBJECTIVE-F1-b: 0.615; OBJECTIVE-P-b: 0.484; OBJECTIVE-R-b: 0.844
+INFO:root:VICTIM-F1: 0.647; VICTIM-P: 0.600; VICTIM-R: 0.703
+INFO:root:VICTIM-F1-b: 0.789; VICTIM-P-b: 0.728; VICTIM-R-b: 0.861
+INFO:root:Starting Fold 3
+INFO:root:model built
+INFO:root:Fold 3 scores:
+INFO:root:F1: 0.550; P: 0.496; R: 0.638
+INFO:root:AGENT-F1: 0.563; AGENT-P: 0.585; AGENT-R: 0.543
+INFO:root:AGENT-F1-b: 0.791; AGENT-P-b: 0.730; AGENT-R-b: 0.865
+INFO:root:CAMPAIGNER-F1: 0.620; CAMPAIGNER-P: 0.602; CAMPAIGNER-R: 0.638
+INFO:root:CAMPAIGNER-F1-b: 0.785; CAMPAIGNER-P-b: 0.726; CAMPAIGNER-R-b: 0.854
+INFO:root:FACILITATOR-F1: 0.466; FACILITATOR-P: 0.411; FACILITATOR-R: 0.540
+INFO:root:FACILITATOR-F1-b: 0.594; FACILITATOR-P-b: 0.485; FACILITATOR-R-b: 0.766
+INFO:root:NEGATIVE_EFFECT-F1: 0.600; NEGATIVE_EFFECT-P: 0.503; NEGATIVE_EFFECT-R: 0.744
+INFO:root:NEGATIVE_EFFECT-F1-b: 0.757; NEGATIVE_EFFECT-P-b: 0.665; NEGATIVE_EFFECT-R-b: 0.877
+INFO:root:OBJECTIVE-F1: 0.455; OBJECTIVE-P: 0.339; OBJECTIVE-R: 0.691
+INFO:root:OBJECTIVE-F1-b: 0.581; OBJECTIVE-P-b: 0.453; OBJECTIVE-R-b: 0.810
+INFO:root:VICTIM-F1: 0.596; VICTIM-P: 0.534; VICTIM-R: 0.675
+INFO:root:VICTIM-F1-b: 0.747; VICTIM-P-b: 0.659; VICTIM-R-b: 0.860
+INFO:root:Starting Fold 4
+INFO:root:model built
+INFO:root:Fold 4 scores:
+INFO:root:F1: 0.545; P: 0.469; R: 0.672
+INFO:root:AGENT-F1: 0.601; AGENT-P: 0.572; AGENT-R: 0.634
+INFO:root:AGENT-F1-b: 0.794; AGENT-P-b: 0.735; AGENT-R-b: 0.863
+INFO:root:CAMPAIGNER-F1: 0.647; CAMPAIGNER-P: 0.606; CAMPAIGNER-R: 0.693
+INFO:root:CAMPAIGNER-F1-b: 0.784; CAMPAIGNER-P-b: 0.714; CAMPAIGNER-R-b: 0.869
+INFO:root:FACILITATOR-F1: 0.418; FACILITATOR-P: 0.341; FACILITATOR-R: 0.539
+INFO:root:FACILITATOR-F1-b: 0.598; FACILITATOR-P-b: 0.472; FACILITATOR-R-b: 0.817
+INFO:root:NEGATIVE_EFFECT-F1: 0.575; NEGATIVE_EFFECT-P: 0.462; NEGATIVE_EFFECT-R: 0.761
+INFO:root:NEGATIVE_EFFECT-F1-b: 0.769; NEGATIVE_EFFECT-P-b: 0.684; NEGATIVE_EFFECT-R-b: 0.879
+INFO:root:OBJECTIVE-F1: 0.435; OBJECTIVE-P: 0.312; OBJECTIVE-R: 0.719
+INFO:root:OBJECTIVE-F1-b: 0.580; OBJECTIVE-P-b: 0.458; OBJECTIVE-R-b: 0.789
+INFO:root:VICTIM-F1: 0.593; VICTIM-P: 0.521; VICTIM-R: 0.689
+INFO:root:VICTIM-F1-b: 0.766; VICTIM-P-b: 0.670; VICTIM-R-b: 0.894
+INFO:root:Starting Fold 5
+INFO:root:model built
+INFO:root:Fold 5 scores:
+INFO:root:F1: 0.556; P: 0.504; R: 0.637
+INFO:root:AGENT-F1: 0.649; AGENT-P: 0.626; AGENT-R: 0.674
+INFO:root:AGENT-F1-b: 0.820; AGENT-P-b: 0.753; AGENT-R-b: 0.901
+INFO:root:CAMPAIGNER-F1: 0.581; CAMPAIGNER-P: 0.577; CAMPAIGNER-R: 0.584
+INFO:root:CAMPAIGNER-F1-b: 0.808; CAMPAIGNER-P-b: 0.767; CAMPAIGNER-R-b: 0.854
+INFO:root:FACILITATOR-F1: 0.388; FACILITATOR-P: 0.375; FACILITATOR-R: 0.402
+INFO:root:FACILITATOR-F1-b: 0.582; FACILITATOR-P-b: 0.500; FACILITATOR-R-b: 0.697
+INFO:root:NEGATIVE_EFFECT-F1: 0.620; NEGATIVE_EFFECT-P: 0.533; NEGATIVE_EFFECT-R: 0.741
+INFO:root:NEGATIVE_EFFECT-F1-b: 0.769; NEGATIVE_EFFECT-P-b: 0.711; NEGATIVE_EFFECT-R-b: 0.836
+INFO:root:OBJECTIVE-F1: 0.470; OBJECTIVE-P: 0.349; OBJECTIVE-R: 0.719
+INFO:root:OBJECTIVE-F1-b: 0.556; OBJECTIVE-P-b: 0.417; OBJECTIVE-R-b: 0.836
+INFO:root:VICTIM-F1: 0.626; VICTIM-P: 0.566; VICTIM-R: 0.700
+INFO:root:VICTIM-F1-b: 0.773; VICTIM-P-b: 0.703; VICTIM-R-b: 0.857
+INFO:root:CROSSVALIDATION results:
+INFO:root:P       : count: 5.000; mean: 0.499; std: 0.018; min: 0.469; 25%: 0.496; 50%: 0.504; 75%: 0.511; max: 0.515
+INFO:root:R       : count: 5.000; mean: 0.655; std: 0.018; min: 0.637; 25%: 0.638; 50%: 0.653; 75%: 0.672; max: 0.674
+INFO:root:F1      : count: 5.000; mean: 0.558; std: 0.012; min: 0.545; 25%: 0.550; 50%: 0.556; 75%: 0.567; max: 0.573
+INFO:root:AGENT-F1: count: 5.000; mean: 0.609; std: 0.036; min: 0.563; 25%: 0.590; 50%: 0.601; 75%: 0.640; max: 0.649
+INFO:root:AGENT-P : count: 5.000; mean: 0.603; std: 0.027; min: 0.572; 25%: 0.585; 50%: 0.598; 75%: 0.626; max: 0.635
+INFO:root:AGENT-R : count: 5.000; mean: 0.616; std: 0.052; min: 0.543; 25%: 0.583; 50%: 0.634; 75%: 0.644; max: 0.674
+INFO:root:CAMPAIGNER-F1: count: 5.000; mean: 0.616; std: 0.024; min: 0.581; 25%: 0.613; 50%: 0.619; 75%: 0.620; max: 0.647
+INFO:root:CAMPAIGNER-P: count: 5.000; mean: 0.606; std: 0.020; min: 0.577; 25%: 0.602; 50%: 0.606; 75%: 0.612; max: 0.632
+INFO:root:CAMPAIGNER-R: count: 5.000; mean: 0.627; std: 0.042; min: 0.584; 25%: 0.605; 50%: 0.613; 75%: 0.638; max: 0.693
+INFO:root:FACILITATOR-F1: count: 5.000; mean: 0.415; std: 0.031; min: 0.388; 25%: 0.397; 50%: 0.405; 75%: 0.418; max: 0.466
+INFO:root:FACILITATOR-P: count: 5.000; mean: 0.361; std: 0.031; min: 0.338; 25%: 0.341; 50%: 0.342; 75%: 0.375; max: 0.411
+INFO:root:FACILITATOR-R: count: 5.000; mean: 0.492; std: 0.056; min: 0.402; 25%: 0.480; 50%: 0.497; 75%: 0.539; max: 0.540
+INFO:root:NEGATIVE_EFFECT-F1: count: 5.000; mean: 0.612; std: 0.025; min: 0.575; 25%: 0.600; 50%: 0.620; 75%: 0.625; max: 0.641
+INFO:root:NEGATIVE_EFFECT-P: count: 5.000; mean: 0.505; std: 0.031; min: 0.462; 25%: 0.489; 50%: 0.503; 75%: 0.533; max: 0.538
+INFO:root:NEGATIVE_EFFECT-R: count: 5.000; mean: 0.781; std: 0.051; min: 0.741; 25%: 0.744; 50%: 0.761; 75%: 0.794; max: 0.864
+INFO:root:OBJECTIVE-F1: count: 5.000; mean: 0.472; std: 0.029; min: 0.435; 25%: 0.455; 50%: 0.470; 75%: 0.497; max: 0.506
+INFO:root:OBJECTIVE-P: count: 5.000; mean: 0.352; std: 0.030; min: 0.312; 25%: 0.339; 50%: 0.349; 75%: 0.374; max: 0.389
+INFO:root:OBJECTIVE-R: count: 5.000; mean: 0.719; std: 0.018; min: 0.691; 25%: 0.719; 50%: 0.719; 75%: 0.724; max: 0.740
+INFO:root:VICTIM-F1: count: 5.000; mean: 0.624; std: 0.029; min: 0.593; 25%: 0.596; 50%: 0.626; 75%: 0.647; max: 0.656
+INFO:root:VICTIM-P: count: 5.000; mean: 0.566; std: 0.039; min: 0.521; 25%: 0.534; 50%: 0.566; 75%: 0.600; max: 0.608
+INFO:root:VICTIM-R: count: 5.000; mean: 0.696; std: 0.014; min: 0.675; 25%: 0.689; 50%: 0.700; 75%: 0.703; max: 0.711
+INFO:root:micro-P : count: 5.000; mean: 0.514; std: 0.019; min: 0.483; 25%: 0.509; 50%: 0.524; 75%: 0.526; max: 0.526
+INFO:root:macro-P : count: 5.000; mean: 0.499; std: 0.018; min: 0.469; 25%: 0.496; 50%: 0.504; 75%: 0.511; max: 0.515
+INFO:root:micro-R : count: 5.000; mean: 0.534; std: 0.025; min: 0.502; 25%: 0.518; 50%: 0.533; 75%: 0.553; max: 0.563
+INFO:root:macro-R : count: 5.000; mean: 0.655; std: 0.018; min: 0.637; 25%: 0.638; 50%: 0.653; 75%: 0.672; max: 0.674
+INFO:root:micro-F1: count: 5.000; mean: 0.523; std: 0.014; min: 0.505; 25%: 0.515; 50%: 0.522; 75%: 0.530; max: 0.543
+INFO:root:macro-F1: count: 5.000; mean: 0.558; std: 0.012; min: 0.545; 25%: 0.550; 50%: 0.556; 75%: 0.567; max: 0.573
+INFO:root:AGENT-F1m-b: count: 5.000; mean: 0.784; std: 0.015; min: 0.766; 25%: 0.768; 50%: 0.791; 75%: 0.793; max: 0.799
+INFO:root:AGENT-F1-b: count: 5.000; mean: 0.807; std: 0.014; min: 0.791; 25%: 0.794; 50%: 0.814; 75%: 0.818; max: 0.820
+INFO:root:AGENT-P-b: count: 5.000; mean: 0.749; std: 0.017; min: 0.730; 25%: 0.735; 50%: 0.753; 75%: 0.755; max: 0.774
+INFO:root:AGENT-R-b: count: 5.000; mean: 0.876; std: 0.016; min: 0.863; 25%: 0.865; 50%: 0.867; 75%: 0.882; max: 0.901
+INFO:root:CAMPAIGNER-F1m-b: count: 5.000; mean: 0.756; std: 0.014; min: 0.742; 25%: 0.745; 50%: 0.757; 75%: 0.762; max: 0.776
+INFO:root:CAMPAIGNER-F1-b: count: 5.000; mean: 0.801; std: 0.015; min: 0.784; 25%: 0.785; 50%: 0.808; 75%: 0.812; max: 0.814
+INFO:root:CAMPAIGNER-P-b: count: 5.000; mean: 0.747; std: 0.027; min: 0.714; 25%: 0.726; 50%: 0.751; 75%: 0.767; max: 0.778
+INFO:root:CAMPAIGNER-R-b: count: 5.000; mean: 0.863; std: 0.013; min: 0.854; 25%: 0.854; 50%: 0.854; 75%: 0.869; max: 0.883
+INFO:root:FACILITATOR-F1m-b: count: 5.000; mean: 0.682; std: 0.016; min: 0.665; 25%: 0.668; 50%: 0.684; 75%: 0.690; max: 0.703
+INFO:root:FACILITATOR-F1-b: count: 5.000; mean: 0.583; std: 0.018; min: 0.553; 25%: 0.582; 50%: 0.586; 75%: 0.594; max: 0.598
+INFO:root:FACILITATOR-P-b: count: 5.000; mean: 0.476; std: 0.016; min: 0.459; 25%: 0.465; 50%: 0.472; 75%: 0.485; max: 0.500
+INFO:root:FACILITATOR-R-b: count: 5.000; mean: 0.753; std: 0.056; min: 0.693; 25%: 0.697; 50%: 0.766; 75%: 0.794; max: 0.817
+INFO:root:NEGATIVE_EFFECT-F1m-b: count: 5.000; mean: 0.743; std: 0.013; min: 0.727; 25%: 0.738; 50%: 0.741; 75%: 0.748; max: 0.762
+INFO:root:NEGATIVE_EFFECT-F1-b: count: 5.000; mean: 0.765; std: 0.007; min: 0.757; 25%: 0.759; 50%: 0.769; 75%: 0.769; max: 0.773
+INFO:root:NEGATIVE_EFFECT-P-b: count: 5.000; mean: 0.690; std: 0.023; min: 0.665; 25%: 0.672; 50%: 0.684; 75%: 0.711; max: 0.718
+INFO:root:NEGATIVE_EFFECT-R-b: count: 5.000; mean: 0.860; std: 0.022; min: 0.836; 25%: 0.837; 50%: 0.872; 75%: 0.877; max: 0.879
+INFO:root:OBJECTIVE-F1m-b: count: 5.000; mean: 0.703; std: 0.020; min: 0.673; 25%: 0.700; 50%: 0.701; 75%: 0.720; max: 0.722
+INFO:root:OBJECTIVE-F1-b: count: 5.000; mean: 0.591; std: 0.027; min: 0.556; 25%: 0.580; 50%: 0.581; 75%: 0.615; max: 0.622
+INFO:root:OBJECTIVE-P-b: count: 5.000; mean: 0.463; std: 0.033; min: 0.417; 25%: 0.453; 50%: 0.458; 75%: 0.484; max: 0.503
+INFO:root:OBJECTIVE-R-b: count: 5.000; mean: 0.819; std: 0.022; min: 0.789; 25%: 0.810; 50%: 0.813; 75%: 0.836; max: 0.844
+INFO:root:VICTIM-F1m-b: count: 5.000; mean: 0.786; std: 0.016; min: 0.768; 25%: 0.775; 50%: 0.786; 75%: 0.792; max: 0.810
+INFO:root:VICTIM-F1-b: count: 5.000; mean: 0.776; std: 0.023; min: 0.747; 25%: 0.766; 50%: 0.773; 75%: 0.789; max: 0.808
+INFO:root:VICTIM-P-b: count: 5.000; mean: 0.702; std: 0.038; min: 0.659; 25%: 0.670; 50%: 0.703; 75%: 0.728; max: 0.749
+INFO:root:VICTIM-R-b: count: 5.000; mean: 0.870; std: 0.015; min: 0.857; 25%: 0.860; 50%: 0.861; 75%: 0.876; max: 0.894
+INFO:root:Per-fold scores:
+INFO:root:P       : [0.515, 0.511, 0.496, 0.469, 0.504]
+INFO:root:R       : [0.653, 0.674, 0.638, 0.672, 0.637]
+INFO:root:F1      : [0.567, 0.573, 0.550, 0.545, 0.556]
+INFO:root:AGENT-F1: [0.590, 0.640, 0.563, 0.601, 0.649]
+INFO:root:AGENT-P : [0.598, 0.635, 0.585, 0.572, 0.626]
+INFO:root:AGENT-R : [0.583, 0.644, 0.543, 0.634, 0.674]
+INFO:root:CAMPAIGNER-F1: [0.619, 0.613, 0.620, 0.647, 0.581]
+INFO:root:CAMPAIGNER-P: [0.632, 0.612, 0.602, 0.606, 0.577]
+INFO:root:CAMPAIGNER-R: [0.605, 0.613, 0.638, 0.693, 0.584]
+INFO:root:FACILITATOR-F1: [0.397, 0.405, 0.466, 0.418, 0.388]
+INFO:root:FACILITATOR-P: [0.338, 0.342, 0.411, 0.341, 0.375]
+INFO:root:FACILITATOR-R: [0.480, 0.497, 0.540, 0.539, 0.402]
+INFO:root:NEGATIVE_EFFECT-F1: [0.641, 0.625, 0.600, 0.575, 0.620]
+INFO:root:NEGATIVE_EFFECT-P: [0.538, 0.489, 0.503, 0.462, 0.533]
+INFO:root:NEGATIVE_EFFECT-R: [0.794, 0.864, 0.744, 0.761, 0.741]
+INFO:root:OBJECTIVE-F1: [0.497, 0.506, 0.455, 0.435, 0.470]
+INFO:root:OBJECTIVE-P: [0.374, 0.389, 0.339, 0.312, 0.349]
+INFO:root:OBJECTIVE-R: [0.740, 0.724, 0.691, 0.719, 0.719]
+INFO:root:VICTIM-F1: [0.656, 0.647, 0.596, 0.593, 0.626]
+INFO:root:VICTIM-P: [0.608, 0.600, 0.534, 0.521, 0.566]
+INFO:root:VICTIM-R: [0.711, 0.703, 0.675, 0.689, 0.700]
+INFO:root:micro-P : [0.526, 0.524, 0.509, 0.483, 0.526]
+INFO:root:macro-P : [0.515, 0.511, 0.496, 0.469, 0.504]
+INFO:root:micro-R : [0.518, 0.563, 0.502, 0.553, 0.533]
+INFO:root:macro-R : [0.653, 0.674, 0.638, 0.672, 0.637]
+INFO:root:micro-F1: [0.522, 0.543, 0.505, 0.515, 0.530]
+INFO:root:macro-F1: [0.567, 0.573, 0.550, 0.545, 0.556]
+INFO:root:AGENT-F1m-b: [0.791, 0.793, 0.766, 0.768, 0.799]
+INFO:root:AGENT-F1-b: [0.814, 0.818, 0.791, 0.794, 0.820]
+INFO:root:AGENT-P-b: [0.755, 0.774, 0.730, 0.735, 0.753]
+INFO:root:AGENT-R-b: [0.882, 0.867, 0.865, 0.863, 0.901]
+INFO:root:CAMPAIGNER-F1m-b: [0.776, 0.762, 0.745, 0.742, 0.757]
+INFO:root:CAMPAIGNER-F1-b: [0.814, 0.812, 0.785, 0.784, 0.808]
+INFO:root:CAMPAIGNER-P-b: [0.778, 0.751, 0.726, 0.714, 0.767]
+INFO:root:CAMPAIGNER-R-b: [0.854, 0.883, 0.854, 0.869, 0.854]
+INFO:root:FACILITATOR-F1m-b: [0.668, 0.665, 0.690, 0.684, 0.703]
+INFO:root:FACILITATOR-F1-b: [0.586, 0.553, 0.594, 0.598, 0.582]
+INFO:root:FACILITATOR-P-b: [0.465, 0.459, 0.485, 0.472, 0.500]
+INFO:root:FACILITATOR-R-b: [0.794, 0.693, 0.766, 0.817, 0.697]
+INFO:root:NEGATIVE_EFFECT-F1m-b: [0.762, 0.738, 0.727, 0.741, 0.748]
+INFO:root:NEGATIVE_EFFECT-F1-b: [0.773, 0.759, 0.757, 0.769, 0.769]
+INFO:root:NEGATIVE_EFFECT-P-b: [0.718, 0.672, 0.665, 0.684, 0.711]
+INFO:root:NEGATIVE_EFFECT-R-b: [0.837, 0.872, 0.877, 0.879, 0.836]
+INFO:root:OBJECTIVE-F1m-b: [0.720, 0.722, 0.700, 0.701, 0.673]
+INFO:root:OBJECTIVE-F1-b: [0.622, 0.615, 0.581, 0.580, 0.556]
+INFO:root:OBJECTIVE-P-b: [0.503, 0.484, 0.453, 0.458, 0.417]
+INFO:root:OBJECTIVE-R-b: [0.813, 0.844, 0.810, 0.789, 0.836]
+INFO:root:VICTIM-F1m-b: [0.810, 0.792, 0.768, 0.786, 0.775]
+INFO:root:VICTIM-F1-b: [0.808, 0.789, 0.747, 0.766, 0.773]
+INFO:root:VICTIM-P-b: [0.749, 0.728, 0.659, 0.670, 0.703]
+INFO:root:VICTIM-R-b: [0.876, 0.861, 0.860, 0.894, 0.857]

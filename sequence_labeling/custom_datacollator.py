@@ -43,5 +43,15 @@ class CustomDataCollator(DataCollatorForTokenClassification):
                 ]
 
             batch[label_name] = torch.tensor(batch[label_name], dtype=torch.int64)
-            batch['pos'] = torch.tensor([v for feature in features  for k,v in feature.items() if k == 'pos'])
+            try:
+                batch['pos'] = torch.tensor([v for feature in features  for k,v in feature.items() if k == 'pos'])
+            except:
+                print([f['text_ids'] for f in features])
+                print(batch.keys())
+                print(batch['input_ids'].shape)
+                #print([len(v) for feature in features  for k,v in feature.items() if k == 'pos'])
+                print(len(features[-1]['pos']))
+                exit()
+                 
+            #print(batch.keys())
             return batch

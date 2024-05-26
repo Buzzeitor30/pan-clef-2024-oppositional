@@ -257,6 +257,8 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
                         label_ids.append(-100) # for consecutive tokens of multi-token words, set the label to -100
                         current_pos_tags.append(one_hot_dict[examples["pos"][i][word_idx]])
                     previous_word_idx = word_idx
+                while len(current_pos_tags) < 256:
+                    current_pos_tags.append(one_hot_dict["SPECIAL"])
                 labels.append(label_ids)
                 pos_tags.append(current_pos_tags)
             tokenized_inputs["labels"] = labels
