@@ -92,6 +92,7 @@ class SklearnTransformerBase(metaclass=ABCMeta):
                 'save_total_limit' : 2,
                 'load_best_model_at_end' : True
             }
+        save_params['remove_unused_columns'] = False
         self._training_args = TrainingArguments(
             do_train=True, do_eval=self._eval is not None,
             learning_rate=self._learning_rate, num_train_epochs=self._num_train_epochs,

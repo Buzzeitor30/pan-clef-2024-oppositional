@@ -10,12 +10,32 @@ from sklearn.model_selection import train_test_split
 from spacy.tokens import Doc
 from torch import tensor as TT
 from transformers import AutoTokenizer, DataCollatorForTokenClassification, Trainer
-
+from sklearn.preprocessing import LabelBinarizer
+from custom_datacollator import CustomDataCollator
+import numpy as np
 from classif_experim.hf_skelarn_wrapper import SklearnTransformerBase
 from data_tools.spacy_utils import get_doc_id, get_annoation_tuples_from_doc
 from sequence_labeling.multi_task_model import MultiTaskModel, Task
 from sequence_labeling.spanannot2hf import extract_spans, convert_to_hf_format, labels_from_predictions, \
     align_labels_with_tokens, extract_span_ranges
+
+# Lista de categorías
+categories = ["SPECIAL", "ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "INTJ", "NOUN", "NUM", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X", "SPACE", "PART"]
+
+# Crear un diccionario para almacenar los vectores one-hot
+one_hot_dict = {}
+
+# Número total de categorías
+num_categories = len(categories)
+
+# Generar el vector one-hot para cada categoría
+for idx, category in enumerate(categories):
+    # Crear un vector de ceros
+    one_hot_vector = np.zeros(num_categories, dtype=int)
+    # Establecer el valor correspondiente a 1
+    one_hot_vector[idx] = 1
+    # Agregar el vector al diccionario
+    one_hot_dict[category] = one_hot_vector.tolist()
 
 
 class OppSequenceLabelerMultitask(SklearnTransformerBase):
@@ -94,7 +114,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
     def _do_training(self):
         train_dataset = self._dataset['train']
         eval_dataset = self._dataset['eval'] if self._eval else None
-        data_collator = DataCollatorForTokenClassification(self.tokenizer)
+        data_collator = CustomDataCollator(self.tokenizer)
         self._init_train_args()
         trainer = Trainer(model=self.model, args=self._training_args,
             train_dataset=train_dataset, eval_dataset=eval_dataset if self._eval else None,
@@ -219,20 +239,29 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
                 is_split_into_words=True,
             )
             labels = []
+            pos_tags = []
             for i, label in enumerate(examples[label_column_name]):
+                current_pos_tags = []
                 word_ids = tokenized_inputs.word_ids(batch_index=i)
                 previous_word_idx = None
                 label_ids = []
                 for word_idx in word_ids:
-                    if word_idx is None: label_ids.append(-100) # for special token set label to -100 (to ignore in loss)
+                    if word_idx is None: 
+                        label_ids.append(-100) # for special token set label to -100 (to ignore in loss)
+                        current_pos_tags.append(one_hot_dict["SPECIAL"])
                     elif word_idx != previous_word_idx: # set the label only for the first token of a word
                         label_ids.append(label[word_idx])
-                    else: label_ids.append(-100) # for consecutive tokens of multi-token words, set the label to -100
+                        current_pos_tags.append(one_hot_dict[examples["pos"][i][word_idx]])
+                    else: 
+                        label_ids.append(-100) # for consecutive tokens of multi-token words, set the label to -100
+                        current_pos_tags.append(one_hot_dict[examples["pos"][i][word_idx]])
                     previous_word_idx = word_idx
                 labels.append(label_ids)
+                pos_tags.append(current_pos_tags)
             tokenized_inputs["labels"] = labels
             tokenized_inputs["task_ids"] = [task_id] * len(tokenized_inputs["labels"])
-            #tokenized_inputs["pos_tagging"] = [0] * len(tokenized_inputs["labels"])
+            tokenized_inputs["pos"] = pos_tags
+
             return tokenized_inputs
         if isinstance(raw_datasets, DatasetDict):
             tokenized_datasets = raw_datasets.map(tokenize_and_align_labels, batched=True, num_proc=1,
@@ -272,6 +301,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
             print("\n\n")
 
     def _construct_predict_dataset(self, docs, spans=None):
+        print("Construct dataset")
         if spans == None: # no spans provided, create a list of #docs empty lists for compatibility
             spans = [[] for _ in range(len(docs))]
         raw_dset_per_label = self._construct_raw_hf_dataset(docs, spans, downsample=None)
@@ -279,6 +309,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
         for label in self.task_labels:
             tokenized_dataset = self._tokenize_token_classification_dataset(
                 raw_datasets=raw_dset_per_label[label], tokenizer=self.tokenizer, task_id=self.task_indices[label])
+            print(tokenized_dataset)
             tokenized_dset_per_label[label] = tokenized_dataset
         return tokenized_dset_per_label
 
@@ -299,10 +330,10 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
             for t in dset:
                 if not self._is_roberta: ttids = t['token_type_ids']
                 else: ttids = [0]
-                ids, att, tti, tsk = [t['input_ids']], [t['attention_mask']], [ttids], [self.task_indices[label]]
-                ids, att, tti, tsk = TT(ids, device=self.device), TT(att, device=self.device), \
-                                     TT(tti, device=self.device), TT(tsk, device=self.device)
-                res, _ = self.model(ids, att, tti, task_ids=tsk)
+                ids, att, tti, tsk, pos_tags = [t['input_ids']], [t['attention_mask']], [ttids], [self.task_indices[label]], [t['pos']]
+                ids, att, tti, tsk, pos_tags = TT(ids, device=self.device), TT(att, device=self.device), \
+                                     TT(tti, device=self.device), TT(tsk, device=self.device), TT(pos_tags, device=self.device)
+                res, _ = self.model(ids, att, tti, task_ids=tsk, pos=pos_tags)
                 preds = res[0].cpu().detach().numpy()
                 orig_tokens = t['tokens']
                 pred_labels = labels_from_predictions(preds, t['labels'], label)
