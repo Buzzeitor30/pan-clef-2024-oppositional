@@ -4,7 +4,7 @@ from typing import Tuple, List
 import json
 from spacy.tokens import Doc
 
-from data_tools.spacy_utils import ON_DOC_ID, ON_DOC_CLS_EXTENSION, ON_DOC_EXTENSION, create_spacy_model, \
+from data_tools.spacy_utils import ON_DOC_ID, ON_DOC_CLS_EXTENSION, ON_DOC_EXTENSION, ON_DOC_POS, create_spacy_model, \
     define_spacy_extensions
 from data_tools.span_data_definitions import SPAN_LABELS_OFFICIAL, NONE_LABEL
 
@@ -77,7 +77,6 @@ def reconstruct_spacy_docs_from_json(json_file, lang, doc_categ_map=CATEGORY_MAP
         #print(';'.join(words))
         doc = Doc(nlp.vocab, words=words) # Recreate the Doc object
         # set the doc id and category properties
-        doc._.set(ON_DOC_ID, item['id'])
         if 'category' in item:
             doc._.set(ON_DOC_CLS_EXTENSION, doc_categ_map[item['category']])
         if 'annotations' in item:
@@ -85,6 +84,8 @@ def reconstruct_spacy_docs_from_json(json_file, lang, doc_categ_map=CATEGORY_MAP
                 # Calculate span from start/end token indices
                 span_tuple = json_annotation_to_tuple(annot)
                 doc._.get(ON_DOC_EXTENSION).append(span_tuple)
+        if 'POS' in item:
+            doc._.set(ON_DOC_POS, item["POS"])
         recreated_docs.append(doc)
     return recreated_docs
 

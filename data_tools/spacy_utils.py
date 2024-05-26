@@ -11,7 +11,7 @@ ON_DOC_EXTENSION = 'opn_spans' # doc._.opn_spans
 #ON_SPAN_EXTENSION = 'label' # span._.label
 #ON_SPAN_AUTHOR = 'author' # span._.author
 ON_DOC_ID = 'doc_id' # doc._.id
-
+ON_DOC_POS = 'doc_pos'
 # names of the extension property for doc class label
 ON_DOC_CLS_EXTENSION = 'opn_class' # doc._.opn_spans
 
@@ -23,6 +23,7 @@ def define_spacy_extensions():
     Doc.set_extension(ON_DOC_CLS_EXTENSION, default=None) # classif. label extension
     Doc.set_extension(ON_DOC_EXTENSION, default=[]) # span annotations
     Doc.set_extension(ON_DOC_ID, default=None) # doc id
+    Doc.set_extension(ON_DOC_POS, default=[])
     #Span.set_extension(ON_SPAN_EXTENSION, default=None)
     #Span.set_extension(ON_SPAN_AUTHOR, default=None)
     __EXTENSIONS_DEFINED = True
@@ -50,6 +51,8 @@ def get_doc_id(doc:Doc):
 def get_doc_class(doc:Doc):
     return doc._.get(ON_DOC_CLS_EXTENSION)
 
+def get_doc_pos(doc:Doc):
+    return doc._.get(ON_DOC_POS)
 
 def get_annoation_tuples_from_doc(doc:Doc):
     '''
