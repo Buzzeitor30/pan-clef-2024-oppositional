@@ -48,7 +48,7 @@ class MultiTaskModel(nn.Module):
         if task.type == "seq_classification":
             return SequenceClassificationHead(encoder_hidden_size, task.num_labels)
         elif task.type == "token_classification":
-            return TokenClassificationHead(encoder_hidden_size, task.num_labels)
+            return TokenClassificationHead(encoder_hidden_size + 19, task.num_labels)
         else:
             raise NotImplementedError()
 
@@ -84,19 +84,18 @@ class MultiTaskModel(nn.Module):
             sequence_output = outputs.last_hidden_state
             # this is because the pooled_output is a necessary argument, but it is used only for sequence classification
             pooled_output = sequence_output
-
         unique_task_ids_list = torch.unique(task_ids).tolist()
 
         loss_list = []
         logits = None
         for unique_task_id in unique_task_ids_list:
-
             task_id_filter = task_ids == unique_task_id
             logits, task_loss = self.output_heads[str(unique_task_id)].forward(
                 sequence_output[task_id_filter],
                 pooled_output[task_id_filter],
                 labels=None if labels is None else labels[task_id_filter],
                 attention_mask=attention_mask[task_id_filter],
+                pos=kwargs['pos'][task_id_filter].to("cuda")
             )
 
             if labels is not None:
@@ -178,6 +177,7 @@ class TokenClassificationHead(nn.Module):
         self, sequence_output, pooled_output, labels=None, attention_mask=None, **kwargs
     ):
         sequence_output_dropout = self.dropout(sequence_output)
+        sequence_output_dropout = torch.cat((sequence_output_dropout, kwargs['pos']), dim=2)
         logits = self.classifier(sequence_output_dropout)
 
         loss = None

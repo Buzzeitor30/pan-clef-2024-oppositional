@@ -206,16 +206,17 @@ DEFAULT_RND_SEED = 1943123
 
 HF_MODEL_LIST_SEQLAB = {
     'en': [
-           'bert-base-cased',
+           #'bert-base-cased',
            ],
     'es': [
-            'dccuchile/bert-base-spanish-wwm-cased',
+            #'dccuchile/bert-base-spanish-wwm-cased',
+            "PlanTL-GOB-ES/roberta-base-bne"
           ],
 }
 
 HF_CORE_HPARAMS_SEQLAB_MULTITASK = {
     'learning_rate': 2e-5,
-    'num_train_epochs': 10,
+    'num_train_epochs': 3,
     'warmup': 0.1,
     'weight_decay': 0.01,
     'batch_size': 16,
