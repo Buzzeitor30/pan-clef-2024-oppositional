@@ -215,7 +215,7 @@ HF_MODEL_LIST_SEQLAB = {
 
 HF_CORE_HPARAMS_SEQLAB_MULTITASK = {
     'learning_rate': 2e-5,
-    'num_train_epochs': 10,
+    'num_train_epochs': 5,
     'warmup': 0.1,
     'weight_decay': 0.01,
     'batch_size': 16,
