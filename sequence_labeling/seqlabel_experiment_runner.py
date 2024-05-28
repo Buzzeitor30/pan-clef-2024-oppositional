@@ -12,12 +12,13 @@ from classif_experim import classif_experiment_runner
 from classif_experim.classif_experiment_runner import setup_logging
 from classif_experim.classif_utils import classif_scores
 from classif_experim.pynvml_helpers import print_cuda_devices
-from data_tools.dataset_loaders import load_dataset_full
+from data_tools.dataset_loaders import load_dataset_full, load_test_dataset_full
 from data_tools.spacy_utils import get_doc_id, get_doc_class, get_annoation_tuples_from_doc
 from evaluation.oppositional_evaluator import calc_macro_averages
 from sequence_labeling.seqlab_sklearn_wrapper_multitask import OppSequenceLabelerMultitask
 from sequence_labeling.span_f1_metric import compute_score_pr
 from data_tools.span_data_definitions import SPAN_LABELS_OFFICIAL
+from data_tools.dataset_utils import save_sequence_label_predictions_to_json
 
 global logger
 
@@ -38,6 +39,7 @@ def run_crossvalid_seqlab_transformers(lang, model_label, model_params, num_fold
     '''
     logger.info(f'RUNNING crossvalid. for model: {model_label}')
     docs = load_dataset_full(lang, format='docbin')
+    test_docs = load_test_dataset_full(lang, format='docbin')
     if test: docs = docs[:test]
     foldgen = StratifiedKFold(n_splits=num_folds, random_state=rnd_seed, shuffle=True)
     fold_index = 0
@@ -57,6 +59,15 @@ def run_crossvalid_seqlab_transformers(lang, model_label, model_params, num_fold
         for i in test_index: docs_test.append(docs[i])
         # train model
         model.fit_(docs_train)
+
+        #STORE TEST PREDICTIONS
+        print("Official test set")
+        print("Predicting")
+        spans_predict = model.predict(test_docs)
+        print("Saving predictions")
+        pred_fname = f'./results/Elias&Sergio_task2_{lang}_{fold_index}.json'
+        save_sequence_label_predictions_to_json(test_docs, spans_predict, pred_fname)
+        print("Predictions saved")
         # evaluate model
         spans_test = [get_annoation_tuples_from_doc(doc) for doc in docs_test]
         spans_pred = model.predict(docs_test)

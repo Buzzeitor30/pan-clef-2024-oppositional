@@ -328,7 +328,7 @@ class OppSequenceLabelerMultitask(SklearnTransformerBase):
         tokenized_dset_per_label = self._construct_predict_dataset(X)
         for label in tqdm(self.task_labels, colour="green"):
             dset = tokenized_dset_per_label[label]
-            for t in dset:
+            for t in tqdm(dset, colour="blue", leave=False):
                 if not self._is_roberta: ttids = t['token_type_ids']
                 else: ttids = [0]
                 ids, att, tti, tsk, pos_tags = [t['input_ids']], [t['attention_mask']], [ttids], [self.task_indices[label]], [t['pos']]

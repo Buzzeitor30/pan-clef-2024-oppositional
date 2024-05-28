@@ -87,6 +87,8 @@ def reconstruct_spacy_docs_from_json(json_file, lang, doc_categ_map=CATEGORY_MAP
                 doc._.get(ON_DOC_EXTENSION).append(span_tuple)
         if 'POS' in item:
             doc._.set(ON_DOC_POS, item["POS"])
+        else:
+            doc._.set(ON_DOC_POS, [token.pos_ for token in nlp(doc)])
         recreated_docs.append(doc)
     return recreated_docs
 
