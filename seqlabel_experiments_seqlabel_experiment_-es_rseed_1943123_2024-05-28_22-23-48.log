@@ -1,0 +1,6 @@
+INFO:root:RUNNING classif. experiments: lang=ES, num_folds=5, max_seq_len=256, eval=None, rnd_seed=1943123, test=False
+INFO:root:... SEED = 1943123
+INFO:root:... HPARAMS = learning_rate: 2e-05; num_train_epochs: 5; warmup: 0.1; weight_decay: 0.01; batch_size: 16
+INFO:root:RUNNING crossvalid. for model: dccuchile/bert-base-spanish-wwm-cased
+INFO:root:Starting Fold 1
+INFO:root:model built

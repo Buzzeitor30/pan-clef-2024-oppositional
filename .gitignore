@@ -14,5 +14,6 @@ __pycache__
 *.txt
 *.pkl
 *.safetensors
+*.json
 
 requirements.txt

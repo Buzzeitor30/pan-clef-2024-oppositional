@@ -11,7 +11,7 @@ ADDITIONAL_PYTHONPATH=${ADDITIONAL_PYTHONPATH:-"."}
 # Extend the PYTHONPATH
 export PYTHONPATH=$PYTHONPATH:$ADDITIONAL_PYTHONPATH
 
-for lang in es; do
+for lang in en es; do
     label="seqlabel_experiment_-${lang}"
     python $MODULE_NAME $lang 5 \
         --experim_label $label \

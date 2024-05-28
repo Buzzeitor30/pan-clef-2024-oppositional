@@ -217,12 +217,12 @@ DEFAULT_RND_SEED = 1943123
 
 HF_MODEL_LIST_SEQLAB = {
     'en': [
-           #'bert-base-cased',
-           'FacebookAI/roberta-base'
+           'bert-base-cased',
+           #'FacebookAI/roberta-base'
            ],
     'es': [
-            #'dccuchile/bert-base-spanish-wwm-cased',
-            "PlanTL-GOB-ES/roberta-base-bne"
+            'dccuchile/bert-base-spanish-wwm-cased',
+            #"PlanTL-GOB-ES/roberta-base-bne"
           ],
 }
 
